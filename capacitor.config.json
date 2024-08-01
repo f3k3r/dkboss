@@ -1,0 +1,8 @@
+{
+  "appId": "c0m.control.panel",
+  "appName": "Dk Boss Panel",
+  "webDir": "out",
+  "server":{
+    "androidScheme": "https"
+  }
+}

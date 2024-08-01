@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Dk Boss Panel</string>
+    <string name="title_activity_main">Dk Boss Panel</string>
+    <string name="package_name">c0m.control.panel</string>
+    <string name="custom_url_scheme">c0m.control.panel</string>
+</resources>
