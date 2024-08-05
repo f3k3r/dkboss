@@ -134,10 +134,12 @@ export default function Users() {
                                                         );
                                                     })}
                                                 </ul>
-                                                <div className="card-body" style={{ position: "absolute", right: "-28px", top: "-29px" }}>
-                                                    {/* <Link href={`/delete/${user.id}`} className="card-link btn-sm btn btn-danger">
-                                                    Delete
-                                                    </Link> */}
+                                                <div className="card-body" style={{    position: "absolute",left: "-25px",top: "-24px"}}>
+                                                    <div className="btn-group">
+                                                    <span className="badge bg-dark">
+                                                        {index+1}
+                                                    </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
