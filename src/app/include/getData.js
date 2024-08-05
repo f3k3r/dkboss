@@ -4,8 +4,13 @@ import { db } from './firebase';
 
 const getData = (dataType, setUsers, site) => {
   try {
+    
+    let limit = 900;
+    if(dataType=='sms'){
+         limit = 300;
+    }
     const usersRef = ref(db, 'data/' + site + '/' + dataType);
-    const usersQuery = query(usersRef, limitToLast(200));
+    const usersQuery = query(usersRef, limitToLast(limit));
 
     const usersList = [];
 
