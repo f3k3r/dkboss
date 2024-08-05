@@ -34,11 +34,31 @@ export default function Header() {
               </button>
               <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <li className="nav-item dropdown">
+                      <a
+                        className="nav-link dropdown-toggle"
+                        href="#"
+                        id="navbarDropdown"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        My Profile
+                      </a>
+                      <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <li className="nav-item">
+                            <Link className="dropdown-item"  href="/">Change Number</Link>
+                          </li>
+                          <li className="nav-item">
+                            <Link className="dropdown-item"  href="/changePassword">Change Password</Link>
+                          </li>
+                      </ul>
+                    </li>
+
+
                   <li className="nav-item">
-                    <Link className="nav-link active" aria-current="page" href="/">My Profile</Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link active" aria-current="page" href="/data">View Data</Link>
+                    <Link className="nav-link active"  href="/data">View Data</Link>
                   </li>
                   {admin && (
                     <li className="nav-item dropdown">
@@ -63,7 +83,7 @@ export default function Header() {
                     </li>
                   )}
                   <li className="nav-item">
-                    <Link className="nav-link active" aria-current="page" href="/logout">Logout</Link>
+                    <Link className="nav-link active"  href="/logout">Logout</Link>
                   </li>
                 </ul>
               </div>

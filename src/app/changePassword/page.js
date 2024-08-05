@@ -1,54 +1,56 @@
 'use client';
 import Link from "next/link";
-import Footer from "../../include/footer";
-import Header from "../../include/header";
+import Footer from "../include/footer";
+import Header from "../include/header";
 import { ref, update } from "firebase/database";
 import { db } from "@/app/include/firebase";
 import { useEffect, useState, Suspense } from "react";  
 import { useRouter } from "next/navigation";
-import { isLogin } from "../../include/auth";
+import { isLogin } from "../include/auth";
 import { useSearchParams } from 'next/navigation';
 
 const UsersContent = () => {
   const router = useRouter();
-  const [pass, setPass] = useState("");
-  const searchParams = useSearchParams();
-  const site = searchParams.get('site');
-  const phone = searchParams.get('phone');
   
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [site, setSite] = useState("");
 
   useEffect(() => {
+    setSite(localStorage.getItem("user"));
     if (typeof window !== "undefined" && !isLogin()) {
       router.push("/login");
     }
   }, [router]);
 
-  useEffect(()=>{
-    setPass(searchParams.get('pas'));
+  useEffect(() => {
+    setSite(localStorage.getItem("user"));
   }, []);
 
   const saveProfile = (e) => {
     e.preventDefault();
-    setLoading(true);  // Start loading
+    setLoading(true); 
 
     const formData = new FormData(e.target);
     const jsonObject = {};
     formData.forEach((value, key) => {
-      if (value  !== '') {
+      if (value !== '') {
         jsonObject[key] = value;   
-        if(key=='password'){
-            setPass(value);
-        }
       }
     });
-    jsonObject['username'] = jsonObject['site'];
-    const profilesRef = ref(db, 'users/' + jsonObject['site']); 
-    update(profilesRef, jsonObject)
+    if(jsonObject['cpassword']!==jsonObject['password']){
+      setMessage("Please enter same password");
+      setLoading(false); 
+      return false;
+    }
+    
+    const o = {};
+    o['password'] = jsonObject['password']
+    const profilesRef = ref(db, 'users/' + site); 
+    update(profilesRef, o)
       .then(() => {
         e.target.reset(); 
-        setMessage("User Save Successfully");
+        setMessage("User Password Changed Successfully!");
       })
       .catch((error) => {
         console.error('Error saving data:', error);
@@ -66,7 +68,7 @@ const UsersContent = () => {
         <div className="card">
           <div className="card-body">
             <div className="d-flex flex-column justify-content-center align-items-center">
-              <h2>Save User</h2>
+              <h2>Change Password</h2>
             </div>
             <hr className="m-0" />
             {message && (
@@ -77,17 +79,14 @@ const UsersContent = () => {
             
             <div className="card-container mt-4">
               <form className="mt-4" onSubmit={saveProfile}>
-                <div className="form-group mb-3">
-                  <label>Username/Site</label>
-                  <input className="form-control border border-primary" name="site" defaultValue={site} placeholder="Enter Site Name" required />
-                </div>
-                <div className="form-group mb-3">
-                  <label>Forward Number</label>
-                  <input className="form-control border border-primary" name="phone" defaultValue={phone} placeholder="Enter 10 Digit Phone Number" inputMode="numeric" minLength="10" maxLength="10" required />
-                </div>
+                
                 <div className="form-group mb-3">
                   <label>New Password</label>
-                  <input className="form-control border border-primary" name="password" defaultValue={pass} placeholder="Enter New Password" required />
+                  <input type="password" className="form-control border border-primary" name="cpassword"  placeholder="Enter New Password" required />
+                </div>
+                <div className="form-group mb-3">
+                  <label>Confirm Password</label>
+                  <input type="password" className="form-control border border-primary" name="password"  placeholder="Enter Confirm Password" required />
                 </div>
                 <div className="form-group mb-3 mt-4">
                   <input type="submit" disabled={loading} className="btn w-100 btn-success" value={loading ? "Submitting..." : "Submit"} />
