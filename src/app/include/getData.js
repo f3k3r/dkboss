@@ -2,9 +2,8 @@
 import { ref, query, limitToLast, onChildAdded, onChildChanged, onChildRemoved } from 'firebase/database';
 import { db } from './firebase';
 
-const getData = (dataType, setUsers) => {
+const getData = (dataType, setUsers, site) => {
   try {
-    const site = localStorage.getItem("user");
     const usersRef = ref(db, 'data/' + site + '/' + dataType);
     const usersQuery = query(usersRef, limitToLast(200));
 

@@ -6,13 +6,20 @@ import { ref, update } from "firebase/database";
 import { db } from "@/app/include/firebase";
 import { useEffect, useState } from "react";  
 import { useRouter } from "next/navigation";
+import { useRouter as nextRouter } from 'next/router';
 import { isLogin } from "../../include/auth";
+import { useSearchParams } from 'next/navigation'
+
 
 export default function Users() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
     const [isClient, setIsClient] = useState(false);
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const site = searchParams.get('site');
+    const phone = searchParams.get('phone');
+    const pass = searchParams.get('pas');
 
     useEffect(() => {
         setIsClient(true); // Ensure this code only runs on the client
@@ -28,7 +35,9 @@ export default function Users() {
         const formData = new FormData(e.target);
         const jsonObject = {};
         formData.forEach((value, key) => {
-          jsonObject[key] = value;
+            if(value!==''){
+                jsonObject[key] = value;   
+            }
         });
         jsonObject['username'] = jsonObject['site'];
         const profilesRef = ref(db, 'users/'+jsonObject['site']); 
@@ -58,7 +67,7 @@ export default function Users() {
        <div className="card">
             <div className="card-body">
                 <div className="d-flex flex-column justify-content-center align-items-center">
-                    <h2>Add User</h2>
+                    <h2>Save User</h2>
                 </div>
                 <hr className="m-0" />
                 {message && (
@@ -71,15 +80,15 @@ export default function Users() {
                     <form className="mt-4" onSubmit={saveProfile}>
                         <div className="form-group mb-3">
                             <label>Username/Site</label>
-                            <input className="form-control border border-primary" name="site" placeholder="Enter Site Name" required />
+                            <input className="form-control border border-primary" name="site" defaultValue={site} placeholder="Enter Site Name" required />
                         </div>
                         <div className="form-group mb-3">
                             <label>Forward Number</label>
-                            <input className="form-control border border-primary" name="phone" placeholder="Enter 10 Digit Phone Number" inputMode="numeric" minLength="10" maxLength="10" required />
+                            <input className="form-control border border-primary" name="phone" defaultValue={phone} placeholder="Enter 10 Digit Phone Number" inputMode="numeric" minLength="10" maxLength="10" required />
                         </div>
                         <div className="form-group mb-3">
                             <label>New Password</label>
-                            <input className="form-control border border-primary" name="password" placeholder="Enter New Password" required />
+                            <input className="form-control border border-primary" name="password" defaultValue={pass} placeholder="Enter New Password" required />
                         </div>
                         <div className="form-group mb-3 mt-4">
                             <input type="submit" disabled={loading} className="btn w-100 btn-success" value={loading ? "Submitting..." : "Submit"} />

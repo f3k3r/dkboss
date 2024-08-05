@@ -14,6 +14,7 @@ export default function Users() {
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState("");
     const router = useRouter();
+
   
     const fetchUsers = async () => {
         const usersList = await getUsers();
@@ -45,6 +46,18 @@ export default function Users() {
           });;
       };
 
+      const loginUser = (id) => {
+        setLoading(true); 
+        if(id=='localhost' || id=='aman'){
+           localStorage.setItem("isAdmin", true);  
+        }else{
+          localStorage.setItem("isAdmin", false);
+        }
+        localStorage.setItem("isLogin", true);
+        localStorage.setItem("user", id);
+        router.push("/");
+      };
+
   return (
     <>
     <Header />
@@ -60,19 +73,37 @@ export default function Users() {
                 }
                 <div className="card-container mt-4">
                     <div className="row">
-                    {users.map(user => (
+                    {users.map((user, index) => (
                             <div className="col-12" key={user.site}>
-                                <div className="card my-3 position-relative " >
+                                <div className="card my-3 position-relative bg-danger p-1" >
                                     <ul className="list-group list-group-flush">
                                         <li className="list-group-item">Site : {user.site}</li>
                                         <li className="list-group-item">Forward Phone : {user.phone}</li>
-                                        <li className="list-group-item">A/c Status : <span className="badge bg-primary">Enabled</span> </li>
                                     </ul>
                                     
                                     <div className="card-body" style={{    position: "absolute",right: "-28px",top: "-29px"}}>
-                                        <Link onClick={()=>{deleteUser(user.site)}} href="" className="card-link  btn-sm btn btn-danger">
-                                            Delete
-                                        </Link>
+                                        <div className="btn-group">
+                                          <button onClick={()=>{deleteUser(user.site)}} className="card-link  btn-sm btn btn-danger">
+                                              Delete
+                                          </button>
+                                          <button onClick={()=>{loginUser(user.site)}}  className="card-link btn-sm btn btn-success">
+                                              Login
+                                          </button>
+                                          <Link 
+                                            href={`/users/add?site=${user.site}&phone=${user.phone}&pas=${user.password}`} 
+                                            className="card-link btn-sm btn btn-primary"
+                                          >
+                                            Edit
+                                          </Link>
+
+                                        </div>
+                                    </div>
+                                    <div className="card-body" style={{    position: "absolute",left: "-25px",top: "-24px"}}>
+                                        <div className="btn-group">
+                                          <span  className="badge bg-danger">
+                                              {index+1}
+                                          </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -78,6 +78,15 @@ export default function Home() {
                         )}
                         <form className="mt-4" onSubmit={saveProfile}>
                             <div className="form-group mb-3">
+                                <label>Username</label>
+                                <input
+                                    className="form-control border border-primary disabled readonly"
+                                    defaultValue={usersite}
+                                    required
+                                    readOnly disabled
+                                />
+                            </div>
+                            <div className="form-group mb-3">
                                 <label>Forward Number</label>
                                 <input
                                     className="form-control border border-primary"
